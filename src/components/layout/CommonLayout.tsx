@@ -3,17 +3,17 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 
 interface IChild {
-    children: ReactNode
+  children: ReactNode;
 }
 
 const CommonLayout = ({ children }: IChild) => {
-    return (
-        <div>
-            <Navbar />
-            {children}
-            <Footer />
-        </div>
-    );
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="grow-1">{children}</div>
+      <Footer />
+    </div>
+  );
 };
 
 export default CommonLayout;
