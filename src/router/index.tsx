@@ -15,15 +15,15 @@ export const router = createBrowserRouter([
         path: "about",
         Component: About,
       },
-      {
-        path: "login",
-        Component: LoginPage,
-      },
-      {
-        path: "signup",
-        Component: RegisterPage,
-      },
     ],
+  },
+  {
+    path: "/login",
+    Component: LoginPage,
+  },
+  {
+    path: "/signup",
+    Component: RegisterPage,
   },
   {
     path: "/admin",
