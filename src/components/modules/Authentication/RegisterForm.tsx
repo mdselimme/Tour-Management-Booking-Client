@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import GoogleLogo from "@/assets/icons/GoogleLogo";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -37,6 +37,7 @@ export function RegisterForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
+  const navigate = useNavigate();
   const [register] = useRegisterMutation();
 
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -57,6 +58,7 @@ export function RegisterForm({
     };
     try {
       const result = await register(userInfo).unwrap();
+      navigate("/verify");
       toast.success("User registered successfully.");
       console.log(result);
     } catch (error) {

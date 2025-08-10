@@ -4,6 +4,7 @@ import About from "@/Pages/About";
 import Analytics from "@/Pages/Analytics";
 import LoginPage from "@/Pages/Login";
 import RegisterPage from "@/Pages/Register";
+import Verify from "@/Pages/Verify";
 import { createBrowserRouter } from "react-router";
 
 export const router = createBrowserRouter([
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
   {
     path: "/signup",
     Component: RegisterPage,
+  },
+  {
+    path: "/verify",
+    Component: Verify,
   },
   {
     path: "/admin",
