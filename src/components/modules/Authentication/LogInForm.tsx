@@ -50,9 +50,12 @@ export function LoginForm({
       const result = await login(userInfo).unwrap();
       toast.success("User registered successfully.");
       console.log(result);
-    } catch (error:any) {
-      if (error.status === 401) {
-        toast.error("Account is not verified.");
+    } catch (error: any) {
+      if (error.data.message === "Password does not match") {
+        toast.error("Password does not match.");
+      }
+      if (error.data.message === "User is not verified.") {
+        toast.error("Your Account is not verified.");
         navigate("/verify", { state: data.email });
       }
       console.log(error);

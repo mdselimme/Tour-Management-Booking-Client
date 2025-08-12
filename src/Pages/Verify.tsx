@@ -21,6 +21,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { cn } from "@/lib/utils";
 import {
   useSendOtpMutation,
   useVerifyOtpMutation,
@@ -44,6 +45,7 @@ const Verify = () => {
   const navigate = useNavigate();
   const [email] = useState(location.state);
   const [confirmed, setConfirmed] = useState(false);
+  const [timer, setTimer] = useState(10);
   const [sendOtp] = useSendOtpMutation();
   const [verifyOtp] = useVerifyOtpMutation();
   const form = useForm<z.infer<typeof optSchema>>({
@@ -63,6 +65,7 @@ const Verify = () => {
         setConfirmed(true);
       }
       setConfirmed(true);
+      setTimer(10);
     } catch (error) {
       console.log(error);
     }
@@ -91,6 +94,18 @@ const Verify = () => {
       navigate("/");
     }
   }, [navigate, email]);
+
+  useEffect(() => {
+    if (!email && !confirmed) {
+      return;
+    }
+    const timerId = setInterval(() => {
+      if (confirmed) {
+        setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+      }
+    }, 1000);
+    return () => clearInterval(timerId);
+  }, [email, confirmed]);
 
   return (
     <div className="grid place-items-center h-screen">
@@ -141,7 +156,21 @@ const Verify = () => {
                             </InputOTPGroup>
                           </InputOTP>
                         </FormControl>
-                        <FormDescription></FormDescription>
+                        <FormDescription>
+                          {timer} seconds
+                          <Button
+                            onClick={handleSendOtp}
+                            variant={"link"}
+                            type="submit"
+                            disabled={timer !== 0}
+                            className={cn({
+                              "cursor-pointer": timer === 0,
+                              "text-gray-500": timer !== 0,
+                            })}
+                          >
+                            Resend Otp
+                          </Button>
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
