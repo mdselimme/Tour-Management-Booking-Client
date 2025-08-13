@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Password from "@/components/ui/password";
+import config from "@/config";
 
 const logInSchema = z.object({
   email: z.email(),
@@ -48,8 +49,10 @@ export function LoginForm({
     };
     try {
       const result = await login(userInfo).unwrap();
-      toast.success("User registered successfully.");
-      console.log(result);
+      if (result?.success) {
+        toast.success("User logged in successfully.");
+        navigate("/");
+      }
     } catch (error: any) {
       if (error.data.message === "Password does not match") {
         toast.error("Password does not match.");
@@ -119,7 +122,13 @@ export function LoginForm({
             Or continue with
           </span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button
+          onClick={() => {
+            window.open(`${config.baseUrl}/auth/google`);
+          }}
+          variant="outline"
+          className="w-full"
+        >
           <GoogleLogo />
           Login with Google
         </Button>

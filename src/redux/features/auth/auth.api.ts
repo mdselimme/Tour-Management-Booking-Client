@@ -3,7 +3,7 @@ import type { IResponse, ISendOtp, IVerifyOtp } from "@/types";
 
 
 
-const authApi = baseApi.injectEndpoints({
+export const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
 
         register: builder.mutation({
@@ -22,6 +22,14 @@ const authApi = baseApi.injectEndpoints({
             })
         }),
 
+        logOut: builder.mutation({
+            query: () => ({
+                url: "/auth/logout",
+                method: "POST",
+            }),
+            invalidatesTags: ["user"]
+        }),
+
         sendOtp: builder.mutation<IResponse<null>, ISendOtp>({
             query: (userBody) => ({
                 url: "/otp/send",
@@ -38,7 +46,21 @@ const authApi = baseApi.injectEndpoints({
             })
         }),
 
+        userInfo: builder.query({
+            query: () => ({
+                url: "/user/me",
+                method: "GET",
+            }),
+            providesTags: ["user"]
+        }),
+
     })
 });
 
-export const { useRegisterMutation, useLoginMutation, useSendOtpMutation, useVerifyOtpMutation } = authApi;
+export const {
+    useRegisterMutation,
+    useLoginMutation,
+    useSendOtpMutation,
+    useVerifyOtpMutation,
+    useUserInfoQuery,
+    useLogOutMutation } = authApi;
