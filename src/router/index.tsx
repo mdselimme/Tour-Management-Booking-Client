@@ -5,9 +5,12 @@ import LoginPage from "@/Pages/Login";
 import RegisterPage from "@/Pages/Register";
 import Verify from "@/Pages/Verify";
 import { generateRoutes } from "@/utils/generatesRoute";
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import { AdminSidBarItems } from "./adminSideBarItems";
 import { UserSidebarItems } from "./userSideBarItems";
+import { withAuth } from "@/utils/withAuth";
+import { role } from "@/constant/role";
+import type { TRole } from "@/types";
 
 export const router = createBrowserRouter([
   {
@@ -34,12 +37,18 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    Component: DashboardLayout,
-    children: [...generateRoutes(AdminSidBarItems)],
+    Component: withAuth(DashboardLayout, role.supeAdmin as TRole),
+    children: [
+      { index: true, element: <Navigate to={"/admin/analytics"} /> },
+      ...generateRoutes(AdminSidBarItems),
+    ],
   },
   {
     path: "/user",
-    Component: DashboardLayout,
-    children: [...generateRoutes(UserSidebarItems)],
+    Component: withAuth(DashboardLayout, role.user as TRole),
+    children: [
+      { index: true, element: <Navigate to={"/user/bookings"} /> },
+      ...generateRoutes(UserSidebarItems),
+    ],
   },
 ]);
