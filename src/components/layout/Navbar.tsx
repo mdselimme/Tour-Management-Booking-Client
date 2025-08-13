@@ -12,7 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ModeToggle } from "./ModeToggler";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import {
   authApi,
   useLogOutMutation,
@@ -30,10 +30,12 @@ const navigationLinks = [
 export default function Component() {
   const { data } = useUserInfoQuery({});
   const [logOut] = useLogOutMutation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const handleLogOut = async () => {
     const result = await logOut({}).unwrap();
     if (result.success) {
+      navigate("/login");
       toast.success("Logged Out Successfully.");
       dispatch(authApi.util.resetApiState());
     }
