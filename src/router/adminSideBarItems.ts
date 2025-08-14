@@ -21,9 +21,9 @@ export const AdminSidBarItems: ISideBarItem[] = [
         title: "Tour Management",
         items: [
             {
-                title: "Add Tour",
-                url: "/admin/add-tour",
-                component: AddTour
+                title: "Add Tour Type",
+                url: "/admin/add-tour-type",
+                component: AddTourType
             },
             {
                 title: "Add Division",
@@ -31,9 +31,9 @@ export const AdminSidBarItems: ISideBarItem[] = [
                 component: AddDivision
             },
             {
-                title: "Add Tour Type",
-                url: "/admin/add-tour-type",
-                component: AddTourType
+                title: "Add Tour",
+                url: "/admin/add-tour",
+                component: AddTour
             },
         ],
     },
