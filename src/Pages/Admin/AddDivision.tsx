@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AddDivisionModel } from "@/components/modules/Admin/Division/AddDivisionModel";
 import {
   Table,
@@ -9,7 +8,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetAllDivisionQuery } from "@/redux/features/division/division.api";
-import { toast } from "sonner";
 
 const AddDivision = () => {
   const { data } = useGetAllDivisionQuery({});

@@ -11,12 +11,22 @@ import { UserSidebarItems } from "./userSideBarItems";
 import { withAuth } from "@/utils/withAuth";
 import { role } from "@/constant/role";
 import type { TRole } from "@/types";
+import HomePage from "@/Pages/HomePage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: App,
     children: [
+      {
+        index: true,
+        path: "/",
+        Component: HomePage,
+      },
+      {
+        path: "/home",
+        Component: HomePage,
+      },
       {
         path: "about",
         Component: About,
