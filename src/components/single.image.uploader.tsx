@@ -29,8 +29,6 @@ export default function SingleFileUploader({
     maxSize,
   });
 
-  console.log(files);
-
   useEffect(() => {
     if (files.length > 0) {
       const file = files[0].file;
