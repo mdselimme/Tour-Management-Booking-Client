@@ -3,6 +3,14 @@ import { DeleteConfirmation } from "@/components/deleteConfirmation";
 import { AddTourTypeModal } from "@/components/modules/Admin/TourType/AddTourTypeModal";
 import { Button } from "@/components/ui/button";
 import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
   Table,
   TableBody,
   TableCell,
@@ -15,11 +23,27 @@ import {
   useDeleteTourTypeMutation,
 } from "@/redux/features/tour/tour.api";
 import { Trash2 } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 const AddTourType = () => {
-  const { data } = useAllTourTypesQuery({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data } = useAllTourTypesQuery({ page: currentPage, limit: 5 });
   const [removeTourType] = useDeleteTourTypeMutation();
+
+  const totalPage = data?.meta.totalPage;
+
+  const pagePrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const pageNext = () => {
+    if (currentPage < data.meta.totalPage) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
 
   const handleRemoveTourType = async (tourId: string) => {
     const toastId = toast.loading("Removing.....");
@@ -70,6 +94,44 @@ const AddTourType = () => {
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="mt-5">
+        {totalPage > 1 && (
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem
+                className={
+                  currentPage === 1
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              >
+                <PaginationPrevious onClick={pagePrev} />
+              </PaginationItem>
+              {Array.from({ length: totalPage }, (_, index) => index + 1).map(
+                (page) => (
+                  <PaginationItem
+                    onClick={() => setCurrentPage(page)}
+                    key={page}
+                  >
+                    <PaginationLink isActive={currentPage === page}>
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                )
+              )}
+              <PaginationItem
+                className={
+                  currentPage !== 1
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              >
+                <PaginationNext onClick={pageNext} />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
     </div>
   );
