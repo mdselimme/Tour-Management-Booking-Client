@@ -1,3 +1,4 @@
+export type { ITour } from './tour.types';
 import type { ComponentType } from "react";
 
 export type { ISendOtp, IVerifyOtp, ILogin } from "./auth.type";

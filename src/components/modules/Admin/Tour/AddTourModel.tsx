@@ -56,6 +56,12 @@ const addTourSchema = z.object({
   description: z.string(),
   startDate: z.date(),
   endDate: z.date(),
+  maxGuest: z.coerce.number(),
+  location: z.string(),
+  costFrom: z.coerce.number(),
+  arrivalLocation: z.string(),
+  departureLocation: z.string(),
+  minAge: z.coerce.number(),
   included: z.array(z.object({ value: z.string() })),
   excluded: z.array(z.object({ value: z.string() })),
   amenities: z.array(z.object({ value: z.string() })),
@@ -85,12 +91,18 @@ export function AddTourModel() {
   const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof addTourSchema>>({
-    resolver: zodResolver(addTourSchema),
+    resolver: zodResolver(addTourSchema) as any,
     defaultValues: {
       title: "",
       division: "",
       tourType: "",
       description: "",
+      minAge: 0,
+      maxGuest: 0,
+      location: "",
+      costFrom: 0,
+      arrivalLocation: "",
+      departureLocation: "",
       startDate: new Date(),
       endDate: new Date(),
       included: [
@@ -156,6 +168,9 @@ export function AddTourModel() {
       excluded: data.excluded.map((item) => item.value),
       amenities: data.amenities.map((item) => item.value),
       tourPlan: data.tourPlan.map((item) => item.value),
+      costFrom: Number(data.costFrom),
+      maxGuest: Number(data.maxGuest),
+      minAge: Number(data.minAge),
     };
 
     const formData = new FormData();
@@ -202,23 +217,44 @@ export function AddTourModel() {
                 className="space-y-6"
                 id="add-tour"
               >
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="mb-3">Tour Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Tour name .."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="flex gap-5">
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col flex-1">
+                        <FormLabel className="mb-3">Tour Title</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Tour Title .."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="costFrom"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col flex-1">
+                        <FormLabel className="mb-3">Cost From</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Cost From .."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Tour Division  */}
                 <div className="flex gap-5">
                   <FormField
                     control={form.control}
@@ -249,6 +285,7 @@ export function AddTourModel() {
                       </FormItem>
                     )}
                   />
+                  {/* Tour Type  */}
                   <FormField
                     control={form.control}
                     name="tourType"
@@ -274,6 +311,44 @@ export function AddTourModel() {
                             )}
                           </SelectContent>
                         </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                {/* Max Guest  */}
+                <div className="flex gap-5">
+                  <FormField
+                    control={form.control}
+                    name="maxGuest"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col flex-1">
+                        <FormLabel>Max Guest</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Max Guest .."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  {/* Tour Type  */}
+                  <FormField
+                    control={form.control}
+                    name="minAge"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col flex-1">
+                        <FormLabel>Min age</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Min Age .."
+                            {...field}
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -392,6 +467,63 @@ export function AddTourModel() {
                     )}
                   />
                 </div>
+                {/* Tour Location  */}
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col flex-1">
+                      <FormLabel className="mb-3">Tour Location</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Tour Location .."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* arrival Location  */}
+                <div className="flex gap-5">
+                  <FormField
+                    control={form.control}
+                    name="arrivalLocation"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col flex-1">
+                        <FormLabel>Arrival Location</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Arrival Location .."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  {/* departure Location  */}
+                  <FormField
+                    control={form.control}
+                    name="departureLocation"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col flex-1">
+                        <FormLabel>Departure Location</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Departure Location .."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
                 {/* Included  */}
                 <div>
                   <div className="flex justify-between items-center mb-3">

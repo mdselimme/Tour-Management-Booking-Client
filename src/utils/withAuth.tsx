@@ -3,7 +3,7 @@ import type { TRole } from "@/types";
 import type { ComponentType } from "react";
 import { Navigate } from "react-router";
 
-export const withAuth = (Component: ComponentType, requiredRole: TRole) => {
+export const withAuth = (Component: ComponentType, requiredRole?: TRole) => {
   return function AuthWrapper() {
     const { data, isLoading } = useUserInfoQuery({});
 
