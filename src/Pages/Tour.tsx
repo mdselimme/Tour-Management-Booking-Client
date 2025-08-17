@@ -1,3 +1,4 @@
+import TourFilters from "@/components/modules/Tours/TourFilter";
 import { Button } from "@/components/ui/button";
 import { useAllToursQuery } from "@/redux/features/tour/tour.api";
 import type { ITour } from "@/types/tour.types";
@@ -14,12 +15,10 @@ export default function Tour() {
 
   const { data } = useAllToursQuery({ division, tourType });
 
-  console.log(data);
-
   return (
     <div className="container mx-auto px-5 py-8 grid grid-cols-12 gap-5">
-      {/* <TourFilters /> */}
-      <div className="col-span-12 w-full mx-auto">
+      <TourFilters />
+      <div className="col-span-9 w-full mx-auto">
         {data?.map((item: ITour) => (
           <div
             key={item.slug}
