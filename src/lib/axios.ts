@@ -10,13 +10,15 @@ export const axiosInstance = axios.create({
 });
 
 // Add a request interceptor
-axiosInstance.interceptors.request.use(function (config) {
-    // Do something before request is sent
-    return config;
-}, function (error) {
-    // Do something with request error
-    return Promise.reject(error);
-},
+axiosInstance.interceptors.request.use(
+    function (config) {
+        // Do something before request is sent
+        return config;
+    },
+    function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+    },
 );
 
 let isRefreshing = false;
@@ -46,18 +48,18 @@ axiosInstance.interceptors.response.use(
 
         const originalRequest = error.config as AxiosRequestConfig & { _retry: boolean };
 
-        if (isRefreshing) {
-            return new Promise((resolve, reject) => {
-                pendingQueue.push({ resolve, reject });
-            })
-                .then(() => axiosInstance(originalRequest))
-                .catch(() => Promise.reject(error))
-        }
 
-        isRefreshing = true;
         if (error.response.status === 500 && error.response.data.message === "jwt expired" && !originalRequest._retry) {
             console.log("jwt expired")
             originalRequest._retry = true
+            if (isRefreshing) {
+                return new Promise((resolve, reject) => {
+                    pendingQueue.push({ resolve, reject });
+                })
+                    .then(() => axiosInstance(originalRequest))
+                    .catch(() => Promise.reject(error))
+            }
+            isRefreshing = true;
             try {
                 const res = await axiosInstance.post("/auth/refresh-token");
                 console.log("new token ; ", res.data)
